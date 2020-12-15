@@ -60,7 +60,7 @@ class Utilisateur {
 
         // aller chercher les données dans mon fichier json et les transformer en tab
         $tab = json_decode(file_get_contents("datas/users.json"));
-    
+
         // si mon tab rencontre le pseudo POST, rechercher si bon mdp
         foreach($tab as $cle => $valeur) {
             if($valeur->pseudo == $this->pseudo && $valeur->mdp_utilisateur == $this->mdp_utilisateur) {
@@ -71,4 +71,4 @@ class Utilisateur {
         }
         return $connexion;
     }
-}
+} 

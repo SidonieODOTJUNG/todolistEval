@@ -3,6 +3,7 @@
 // routage
 $page = (isset($_GET["page"]))? $_GET["page"] : "accueil";
 
+
 switch($page) {
     case "accueil" : $template = home();
     break;
@@ -16,17 +17,19 @@ switch($page) {
     break;
     case "compte" : $template = welcome();
     break;
+    case "ajoutTache" : $template = insert_tache();
+    break;
     default : $template = home();
     break;
 }
+
+
 
 function home(): array {
     return ["template" => "accueil.php"];
 }
 
 function showFormInscript(): array {
-
-    return ["template" => "inscription.php"];
     require_once "classes/Utilisateur.php";
 
     $users = Utilisateur::getUsers();
@@ -36,7 +39,7 @@ function showFormInscript(): array {
 
 function ajoutID() {
     // création du compteur pour l'id_utilisateur
-    
+
     $monFichier = fopen('datas/compteur.txt',"r" ); 
 
 
@@ -58,10 +61,10 @@ function ajoutID() {
 }
 
 function insert_user(): array {
-   
+
     require_once "classes/Utilisateur.php";
     $compteur = ajoutID();
-    
+
     $user = new Utilisateur($_POST["pseudo"], $_POST["mdp"], $compteur );
     $user->save_user();
 
@@ -76,15 +79,16 @@ function showFormCo(): array {
 
 }
 
-
-
 function connect_user(): array {
 
     require_once "classes/Utilisateur.php";
-    
+
     $userCo = new Utilisateur($_POST["pseudoCo"], $_POST["mdpCo"], $compteur=0 );
     if ($userCo->verify_user()) {
         session_start();
+        $_SESSION["user"] = $_POST["pseudoCo"];
+        $_SESSION["mdp"] = $_POST["mdpCo"];
+        
         header("Location:index.php?page=compte");
         exit; 
     }else {
@@ -95,7 +99,23 @@ function connect_user(): array {
 }
 
 function welcome(): array {
+    session_start();
     return ["template" => "bienvenue.php"];
+}
+
+
+function insert_tache() {
+    session_start();
+    require_once "classes/Tache.php";
+
+    $tache = new Tache($_SESSION["user"], $_POST["intitule"],$_POST["resume"], $_POST["date"]);
+    $tache->save_tache();
+    
+
+
+
+    header("Location:index.php?page=compte");
+    exit; 
 }
 
 
@@ -119,7 +139,7 @@ function welcome(): array {
         <span>Magnam, dicta. Quam nostrum odit dicta animi earum. Optio veniam atque facilis deserunt neque commodi beatae mollitia labore eveniet, illo laudantium in alias ea dolore? Ipsam reprehenderit recusandae esse odio.</span>
     </p>
 
-    <?php require_once "templates/" . $template['template']; ?>
+    <?php require_once "templates/". $template['template']; ?>
 
 
 </body>
