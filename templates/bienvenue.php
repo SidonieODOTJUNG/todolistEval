@@ -24,7 +24,19 @@
             <th>Date limite</th>
         </tr>
 
-    <?php var_dump($listeTaches);?>
+    <?php 
+    require_once "index.php?page=afficherTache"; 
+    $listeTache = afficher_tache();
+    var_dump($listeTache);
+    ?>
+
+    <?php foreach($listeTache as $index => $tache) : ?>
+        <tr>
+            <td><?= $tache['id_tache']?></td>
+            <td><?= $tache['description']?></td>
+            <td><?= $tache['date_limite']?></td>
+        </tr>
+    <?php endforeach ?>  
 
     
     </table>

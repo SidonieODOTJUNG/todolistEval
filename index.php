@@ -111,9 +111,6 @@ function insert_tache() {
     $tache = new Tache($_SESSION["user"], $_POST["intitule"],$_POST["resume"], $_POST["date"]);
     $tache->save_tache();
     
-
-
-
     header("Location:index.php?page=compte");
     exit; 
 }
