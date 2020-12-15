@@ -100,7 +100,10 @@ function connect_user(): array {
 
 function welcome(): array {
     session_start();
-    return ["template" => "bienvenue.php"];
+    require_once "classes/Tache.php";
+    $tache = Tache::recup_liste();
+
+    return ["template" => "bienvenue.php", "datas"=>$tache];
 }
 
 

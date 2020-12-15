@@ -60,8 +60,19 @@ class Tache {
         fwrite($myFile, $json);
         fclose($myFile);
 
-        return $listeTaches;
+       
         }
+    static function recup_liste() {
+        $listeTaches = json_decode(file_get_contents("datas/listeTaches.json"));
+        $tachesutilisateur = [];
+
+        foreach($listeTaches as $tache) {
+            if($tache->user_id == $_SESSION["user"] ) {
+                array_push($tachesutilisateur, $tache);
+            }
+        }
+        return $tachesutilisateur;
+    }
 }
 
 
