@@ -64,8 +64,11 @@ function insert_user(): array {
 
     require_once "classes/Utilisateur.php";
     $compteur = ajoutID();
+    
+    //encryptage du mdp
+    $mdp = password_hash($_POST["mdp"], PASSWORD_DEFAULT, ['cost => 12']);
 
-    $user = new Utilisateur($_POST["pseudo"], $_POST["mdp"], $compteur );
+    $user = new Utilisateur($_POST["pseudo"],$mdp , $compteur );
     $user->save_user();
 
     // redirection du la page de co au lieu de la page d'accueil
@@ -88,7 +91,7 @@ function connect_user(): array {
         session_start();
         $_SESSION["user"] = $_POST["pseudoCo"];
         $_SESSION["mdp"] = $_POST["mdpCo"];
-        
+
         header("Location:index.php?page=compte");
         exit; 
     }else {

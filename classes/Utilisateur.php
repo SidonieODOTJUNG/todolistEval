@@ -46,13 +46,22 @@ class Utilisateur {
         //récup du fichier json
         $users = json_decode(file_get_contents("datas/users.json"));
 
-        // récupération de l'objet en tableau 
-        array_push($users, get_object_vars($this));
+        // // récupération de l'objet en tableau si pseudo inexistant
+        $verif = true;
 
-        // écriture du tableau au format json dans le fichier
+        foreach($users as $user) {
+            if($this->pseudo == $user->pseudo) {
+                $verif = false;
+            }
+        }
+        if($verif) {
+            array_push($users, get_object_vars($this));
+        }
+              
         $myFile = fopen("datas/users.json", "w");
         $json = json_encode($users);
         fwrite($myFile, $json);
+        
         fclose($myFile);
     }
 
@@ -63,12 +72,15 @@ class Utilisateur {
 
         // si mon tab rencontre le pseudo POST, rechercher si bon mdp
         foreach($tab as $cle => $valeur) {
-            if($valeur->pseudo == $this->pseudo && $valeur->mdp_utilisateur == $this->mdp_utilisateur) {
-                $connexion = true; 
-                } else {
-                    $connexion = false;
+            if($valeur->pseudo == $this->pseudo) {
+                if(password_verify($this->mdp_utilisateur, $valeur->mdp_utilisateur)) {
+                    $connexion = true;
                 }
+            } else {
+                $connexion = false;
+            }
         }
+        var_dump($connexion);
         return $connexion;
     }
 } 
