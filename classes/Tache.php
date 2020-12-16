@@ -43,6 +43,7 @@ class Tache {
 
     function setDate_limite (string $date_limite) {
         $this->date_limite = $date_limite;
+
     }
 
     function getDate_limite() : ?string {
@@ -71,6 +72,15 @@ class Tache {
                 array_push($tachesutilisateur, $tache);
             }
         }
+        // trier le tableau
+        usort($tachesutilisateur, function($a, $b) {
+            $al = strtolower($a->date_limite);
+            $bl = strtolower($b->date_limite);
+            if($al == $bl) {
+                return 0;
+            } return ($al > $bl)? +1 : -1 ;
+        });
+
         return $tachesutilisateur;
     }
 }
